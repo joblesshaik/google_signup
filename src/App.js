@@ -1,25 +1,46 @@
-// import logo from './logo.svg';
+
+adavijit firebase auth
+Latest commit fef5953 on Dec 14, 2019
+ History
+ 1 contributor
+Executable File  39 lines (37 sloc)  664 Bytes
+   
+import React, { Component } from 'react';
 import './App.css';
-import{Auntentication} from "./firebase"
-import {  signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-
-function App() {
-  const SignINWitgGoogle=()=>{
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(Auntentication, provider)
-    .then((re)=>{
-      console.log(re);
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
-
+import fire from './config/fire';
+import Login from './Login'
+import Home from './Home'
+class App extends Component{
+  constructor(props)
+  {
+    super(props);
+    this.state={
+      user : {}
+    }
   }
-  return (
-    <div className="App">
-   <button onClick={SignINWitgGoogle}>click me</button>
-    </div>
-  );
+  componentDidMount()
+  {
+    this.authListener();
+  }
+  authListener(){
+    fire.auth().onAuthStateChanged((user)=>{
+      if(user)
+      {
+        this.setState({user})
+      }
+      else{
+        this.setState({user : null})
+      }
+    })
+  }
+
+  render(){
+    return (
+      <div className="App">
+        {this.state.user ? (<Home/>) : (<Login/>)}
+      </div>
+    );
+  }
 }
 
 export default App;
